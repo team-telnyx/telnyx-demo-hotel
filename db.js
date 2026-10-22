@@ -131,7 +131,7 @@ async function openLocal(file) {
 export async function openDb(dataDir) {
   let db, engine;
   if (setting("SQLDB_ID")) {
-    db = new RestDb(setting("SQLDB_ID"), setting("TELNYX_API_KEY"));
+    db = new RestDb(setting("SQLDB_ID"), setting("SQLDB_API_KEY") || setting("TELNYX_API_KEY"));
     engine = "sqldb-api";
   } else if (onEdge()) {
     throw new Error("TELNYXHOTEL_SQLDB_ID is not set");

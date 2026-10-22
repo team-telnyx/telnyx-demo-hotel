@@ -25,6 +25,7 @@ import { deleteContact, initContacts, listContacts, parseContact, saveContact } 
 import { TEMPLATE_DEFAULTS, cleanTemplate, getTemplate, initContactEmail, renderEmail, saveTemplate, sendContactEmail } from "./contact-email.js";
 import { edgeTraffic, initEdgeMetrics } from "./edge-metrics.js";
 import { onEdge, setting } from "./settings.js";
+import { framePolicy } from "./frame-policy.js";
 import { activeCallFor, createCallRecorder, deleteCall, getCall, initCalls, listCalls } from "./calls.js";
 import { LANGUAGES, getConcierge, initConcierge, publicConcierge, saveConcierge } from "./concierge.js";
 import { initAssistantAdmin, readAssistant, updateAssistant } from "./assistant-admin.js";
@@ -94,13 +95,13 @@ const VERSION = (() => {
   if (!branch) try { branch = execFileSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], { cwd: __dirname, stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch { /* no git */ }
   return { backend: JSON.parse(readFileSync(path.join(__dirname, "package.json"), "utf8")).version, branch: branch || "unknown" };
 })();
-// Everything past /health is per-user: never framed, never stored in shared
+const framing = framePolicy(setting("FRAME_ANCESTORS"));
+// Everything past /health is per-user: framed only by configured hosts, never stored in shared
 // caches, and API answers (call data, users) not stored at all.
 app.use((req, res, next) => {
   res.set({
     "X-Content-Type-Options": "nosniff",
-    "X-Frame-Options": "DENY",
-    "Content-Security-Policy": "frame-ancestors 'none'",
+    ...framing,
     "Referrer-Policy": "same-origin",
     "Cache-Control": req.path.startsWith("/api/") || req.path.startsWith("/recap/") ? "no-store" : "private, no-cache",
   });

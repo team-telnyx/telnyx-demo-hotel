@@ -9,7 +9,7 @@ const root = new URL("..", import.meta.url).pathname;
 const edge = new URL("../edge/", import.meta.url).pathname;
 if (!existsSync(`${edge}func.toml`)) throw new Error("edge/func.toml missing: copy edge/func.toml.example and set your function id (README → Deploy on Telnyx Edge)");
 
-const FILES = ["server.js", "auth.js", "calls.js", "calls-codec.js", "guest-stats.js", "contacts.js", "contact-email.js", "geo.js", "edge-metrics.js", "db.js", "recap.js", "settings.js", "concierge.js", "assistant-admin.js", "email.js", "sms.js"];
+const FILES = ["server.js", "frame-policy.js", "auth.js", "calls.js", "calls-codec.js", "guest-stats.js", "contacts.js", "contact-email.js", "geo.js", "edge-metrics.js", "db.js", "recap.js", "settings.js", "concierge.js", "assistant-admin.js", "email.js", "sms.js"];
 for (const f of [...FILES, "public", "geo", "build.json"]) rmSync(`${edge}${f}`, { recursive: true, force: true });
 for (const f of FILES) cpSync(`${root}${f}`, `${edge}${f}`);
 cpSync(`${root}public`, `${edge}public`, { recursive: true });

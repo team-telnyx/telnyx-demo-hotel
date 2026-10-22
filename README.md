@@ -108,9 +108,11 @@ flowchart LR
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | First admin, created while there are no users. |
 | `SESSION_SECRET` | Signs session cookies. |
 | `GUEST_ACCESS` | `off` removes guest access (on by default). |
+| `FRAME_ANCESTORS` | Optional comma-separated exact HTTPS origins allowed to embed the app; denied by default. Original sign-in and permissions still apply. |
 | `EDGE_FUNCTION` | Edge function whose traffic Guest stats shows (default `telnyxhotel-concierge`). |
 | `PORT`, `DATA_DIR` | HTTP port (3000), SQLite location (`./data`). |
 | `SQLDB_ID` | Telnyx Edge SQL database (instead of SQLite). |
+| `SQLDB_API_KEY` | Optional separate storage-account key; defaults to `TELNYX_API_KEY`. Keeps assistant and messaging resources in their original account. |
 | `SMTP_*`, `MAIL_FROM`, `RECAP_OVERRIDE_TO` | Optional SMTP fallback for the recap. |
 | `GIT_BRANCH` | Branch shown in the footer when there is no git checkout. |
 
